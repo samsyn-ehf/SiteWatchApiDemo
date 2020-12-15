@@ -1,0 +1,123 @@
+﻿<Window x:Class="SiteWatchApiDemo.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SiteWatchApiDemo"
+        mc:Ignorable="d"
+        d:DataContext="{d:DesignInstance local:DataContext, IsDesignTimeCreatable=True}"
+        Title="MainWindow" Height="450" Width="800">
+    <Window.Resources>
+        <local:DecompressGeo x:Key="DecompressGeo" />
+        <local:SearchType x:Key="SearchType" />
+    </Window.Resources>
+    <Window.DataContext>
+        <local:DataContext/>
+    </Window.DataContext>
+    <TabControl>
+        <TabItem Header="Login">
+            <Grid  VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="150"/>
+                    <ColumnDefinition Width="200"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="User name" Grid.Column="0" Grid.Row="0"/>
+                <TextBox Text="{Binding UserName}" Grid.Column="1" Grid.Row="0"/>
+                <TextBlock Text="Password" Grid.Column="0" Grid.Row="1"/>
+                <TextBox Text="{Binding Password}"  Grid.Column="1" Grid.Row="1"/>
+                <Button Command="{Binding LoginCommand}" Grid.Column="1" Grid.Row="2">Login</Button>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Avl" IsEnabled="{Binding IsLogedIn}">
+            <Grid>
+                <DataGrid ItemsSource="{Binding ShowVehicleResult.Vehicles}" IsReadOnly="True">
+                    
+                </DataGrid>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Avl Job" Height="20" VerticalAlignment="Top" IsEnabled="{Binding IsLogedIn}">
+            <Grid Margin="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="10"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <TextBlock Text="Name" Grid.Column="0" Grid.Row="0"/>
+                <TextBox Text="{Binding AvlJobName}" Grid.Column="2" Grid.Row="0"/>
+                <TextBlock Text="Remarks" Grid.Column="0" Grid.Row="1"/>
+                <TextBox Text="{Binding AvlJobRemarks}" Grid.Column="2" Grid.Row="1"/>
+
+                <TextBlock Text="Start" Grid.Column="0" Grid.Row="2"/>
+                <TextBox Text="{Binding AvlJobStart}" Grid.Column="2" Grid.Row="2"/>
+
+                <TextBlock Text="End" Grid.Column="0" Grid.Row="3"/>
+                <TextBox Text="{Binding AvlJobEnd}" Grid.Column="2" Grid.Row="3"/>
+
+                <TextBlock Text="Ref table" Grid.Column="0" Grid.Row="4"/>
+                <TextBox Text="{Binding AvlJobRefTable}" Grid.Column="2" Grid.Row="4"/>
+                
+                <TextBlock Text="Ref id" Grid.Column="0" Grid.Row="5"/>
+                <TextBox Text="{Binding AvlJobRefId}" Grid.Column="2" Grid.Row="5"/>
+                
+                <DataGrid ItemsSource="{Binding AvlJobStops}" Grid.Column="2" Grid.Row="6" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Text" Binding="{Binding Text}" Width="100"/>
+                        <DataGridTextColumn Header="PLat" Binding="{Binding PLat}" Width="80"/>
+                        <DataGridTextColumn Header="PLon" Binding="{Binding PLon}" Width="80"/>
+                        <DataGridTextColumn Header="DLat" Binding="{Binding DLat}" Width="80"/>
+                        <DataGridTextColumn Header="DLon" Binding="{Binding DLon}" Width="80"/>
+                        <DataGridTextColumn Header="Order" Binding="{Binding Order}"/>
+                        <DataGridTextColumn Header="Remarks" Binding="{Binding Remarks}" Width="100"/>
+                        <DataGridTextColumn Header="RefTable" Binding="{Binding RefTable}" Width="100"/>
+                        <DataGridTextColumn Header="RefId" Binding="{Binding RefId}" Width="100"/>
+                    </DataGrid.Columns>
+                </DataGrid>
+
+                <TextBlock Grid.Row="7" Grid.Column="2" Text="{Binding AvlJobResult}"/>
+                <Button Command="{Binding NewAvlJobCommand}" Grid.Column="2" Grid.Row="7" HorizontalAlignment="Right" Margin="0,4,0,0">Create new avl job</Button>
+            </Grid>
+        </TabItem>
+        <TabItem Header="Search" IsEnabled="{Binding IsLogedIn}">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="Search"/>
+                <TextBox Text="{Binding Search, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0"/>
+                <DataGrid ItemsSource="{Binding SearchResult.Data}" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="1" IsReadOnly="True" AutoGenerateColumns="False">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Caption" Binding="{Binding D}" />
+                        <DataGridTextColumn Header="Type" Binding="{Binding C, Converter={StaticResource SearchType}}" />
+                        <DataGridTemplateColumn Header="Geo">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding G, Converter={StaticResource DecompressGeo}}" />
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>
