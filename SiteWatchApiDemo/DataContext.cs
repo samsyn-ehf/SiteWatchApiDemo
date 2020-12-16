@@ -20,7 +20,7 @@ namespace SiteWatchApiDemo
         private DateTime avlJobStart = DateTime.Now;
         private DateTime avlJobEnd = DateTime.Now.AddHours(4);
         public string avlJobRefTable = string.Empty;
-        public string avlJobRefId = null; // string.Empty;
+        public string avlJobRefId = string.Empty;
         public string avlJobResult = string.Empty;
 
         private List<SiteWatchWebApiModel.AvlJob.AvlJobJobInsertStop> avlJobStops = new List<SiteWatchWebApiModel.AvlJob.AvlJobJobInsertStop>()
